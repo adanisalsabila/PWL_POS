@@ -11,19 +11,13 @@
             <th>Username</th>
             <th>Nama</th>
             <th>ID Level Pengguna</th>
-
-            
-            <h1>Jumlah Pengguna</h1>
-            <p>Jumlah Total Pengguna : {{$totalUsers}};
         </tr>
-        @foreach ($users as $user)
         <tr>
-            <td>{{ $user->user_id }}</td>
-            <td>{{ $user->username }}</td>
-            <td>{{ $user->nama }}</td>
-            <td>{{ $user->level_id }}</td>
+            <td>{{ $data->user_id }}</td>
+            <td>{{ $data->username }}</td>
+            <td>{{ $data->nama }}</td>
+            <td>{{ $data->level_id }}</td>
         </tr>
-        @endforeach
     </table>
 </body>
 </html>
