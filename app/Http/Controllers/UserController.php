@@ -28,16 +28,16 @@ class UserController extends Controller
         // UserModel::insert($data);
 // $data = ['nama' => 'Pelanggan Pertama', ];
 
-$data =[
-    'level_id' => 2,
-    'username' => 'manager_dua',
-    'nama' => 'Manager 2',
-    'password' => Hash::make('12345')
-];
-UserModel::create($data);
+// $data =[
+//     'level_id' => 2,
+//     'username' => 'manager_tiga',
+//     'nama' => 'Manager 3',
+//     'password' => Hash::make('12345')
+// ];
+// UserModel::create($data);
 
 // UserModel::where('username', 'customer-1') -> update($data);
-        $user = UserModel::all();
+        $user = UserModel::firstWhere('level_id', 1);
         return view('user',['data' => $user]);
     }
 }
