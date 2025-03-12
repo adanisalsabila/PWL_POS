@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\UserModel;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -22,13 +23,22 @@ class UserController extends Controller
     }
     public function tambah_simpan(Request $request)
     {
+      
+       $request->validate([
+        'username' => 'required|unique:users,username',
+        'nama' => 'required',
+        'password' => 'required|min:6',
+        'level_id' => 'required|exists:level_id', 
+    ]);
+
         UserModel::create([
-            'username' => $request->username,
-            'nama' => $request->nama,
-            'password' => Hash::make($request->password),
-            'level_id' => $request->level_id,
-        ]);
-        return redirect('/user');
+        'username' => $request->username,
+        'nama' => $request->nama,
+        'password' => Hash::make($request->password),
+        'level_id' => $request->level_id,
+    ]);
+
+    return redirect('/user')->with('success', 'User berhasil ditambahkan!');
     }
 
     public function ubah($id)
@@ -43,7 +53,7 @@ class UserController extends Controller
 
         $user->username = $request->username;
         $user->nama = $request->nama;
-        $user->password = Hash::make('$request->password');
+        $user->password = Hash::make($request->password);
         $user->level_id = $request->level_id;
 
         $user->save();

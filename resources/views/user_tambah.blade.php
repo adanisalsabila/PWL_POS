@@ -24,5 +24,4 @@
         <input type="submit" class="btn btn-success" value="Simpan">
     </form>
 </body>
-
 </html>
