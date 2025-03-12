@@ -30,23 +30,23 @@
             </a>
 
             <!-- /.sidebar -->
-            @include('layouts.header')
+            @include('layouts.sidebar')
         </aside>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
-            @include('layouts.header')
+            @include('layouts.breadcrumb')
 
 
             <!-- Main content -->
             <section class="content">
-                @include('layouts.header')
+                @yield('content')
             </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        @include('layouts.header')
+        @include('layouts.footer')
     </div>
 
     <!-- jQuery -->
