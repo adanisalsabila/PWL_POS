@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
+use App\Models\KategoriModel;
 
 
 class KategoriController extends Controller
@@ -30,5 +32,24 @@ class KategoriController extends Controller
         $data = DB::table('m_kategori')->get();
         return view('kategori', ['data' => $data]);
     }
+
+    public function dashboardKategori()
+{
+    return view('dashboard.kategori');
+}
+
+public function dashboardKategoriList(Request $request)
+{
+    if ($request->ajax()) {
+        $data = KategoriModel::select('*');
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($row) {
+                return ''; // Tambahkan aksi jika perlu
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+}
     
 }

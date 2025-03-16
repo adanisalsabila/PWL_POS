@@ -68,3 +68,59 @@
         </ul>
     </nav>
 </div>
+
+<li class="nav-item">
+    <a href="{{ route('dashboard.level') }}" class="nav-link">
+        <i class="nav-icon fas fa-user-tag"></i>
+        <p>Level</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('dashboard.kategori') }}" class="nav-link">
+        <i class="nav-icon fas fa-th-list"></i>
+        <p>Kategori</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('dashboard.stok') }}" class="nav-link">
+        <i class="nav-icon fas fa-warehouse"></i>
+        <p>Stok</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('dashboard.barang') }}" class="nav-link">
+        <i class="nav-icon fas fa-box"></i>
+        <p>Barang</p>
+    </a>
+</li>
+<div class="sidebar">
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+            data-accordion="false">
+            <li class="nav-item">
+                <a href="{{ route('level.index') }}" class="nav-link">
+                    <i class="nav-icon fas fa-user-tag"></i>
+                    <p>Level</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('kategori.index') }}" class="nav-link">
+                    <i class="nav-icon fas fa-th-list"></i>
+                    <p>Kategori</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('supplier.index') }}" class="nav-link">
+                    <i class="nav-icon fas fa-truck"></i>
+                    <p>Supplier</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('barang.index') }}" class="nav-link">
+                    <i class="nav-icon fas fa-box"></i>
+                    <p>Barang</p>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    </div>
