@@ -1,23 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Data Kategori Barang</title>
-</head>
-<body>
-    <h1>Data Kategori Barang</h1>
-    <table border="1" cellpadding="2" cellspacing="0">
-        <tr>
-            <th>ID</th>
-            <th>Kode Kategori</th>
-            <th>Nama Kategori</th>
-        </tr>
-        @foreach ($data as $d)
-        <tr>
-            <td>{{ $d->kategori_id }}</td>
-            <td>{{ $d->kategori_kode }}</td>
-            <td>{{ $d->kategori_nama }}</td>
-        </tr>
-        @endforeach
-    </table>
-</body>
-</html>
+@extends('layouts.template')
+
+@section('content')
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Data Kategori</h3>
+        </div>
+        <div class="card-body">
+            <table id="kategori-table" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Kode Kategori</th>
+                        <th>Nama Kategori</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+@endsection
+
+@push('js')
+    <script>
+        $(function() {
+            $('#kategori-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{!! route('kategori.list') !!}', // Pastikan rute ini benar
+                columns: [
+                    { data: 'kategori_id', name: 'kategori_id' },
+                    { data: 'kategori_kode', name: 'kategori_kode' },
+                    { data: 'kategori_nama', name: 'kategori_nama' }
+                ]
+            });
+        });
+    </script>
+@endpush

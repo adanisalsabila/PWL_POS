@@ -8,35 +8,32 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\BarangController;
 
-route::get('/', [WelcomeController::class, 'index']);
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
-Route::group(['prefix' => 'user'], function () {
-    Route::get('/', [UserController::class, 'index']);
-    Route::post('/list', [UserController::class, 'list']);
-    Route::get('/list', [UserController::class, 'list']);
-    Route::get('/create', [UserController::class, 'create']);
-    Route::post('/', [UserController::class, 'store']);
-    Route::get('/{id}', [UserController::class, 'show']);
-    Route::get('/{id}/edit', [UserController::class, 'edit']);
-    Route::put('/{id}', [UserController::class, 'update']);
-    Route::delete('/{id}', [UserController::class, 'destroy']);
+// User Routes
+Route::prefix('user')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('user.index');
+    Route::post('/list', [UserController::class, 'list'])->name('user.list');
+    Route::get('/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('/', [UserController::class, 'store'])->name('user.store');
+    Route::get('/{id}', [UserController::class, 'show'])->name('user.show');
+    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/{id}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 });
 
+// Level Routes
 Route::get('/level', [LevelController::class, 'index'])->name('level.index');
-Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index'); // Tambahkan ini
-Route::get('/supplier', [StokController::class, 'index'])->name('supplier.index'); // Tambahkan ini
-Route::get('/barang', [BarangController::class, 'index'])->name('barang.index'); // Tambahkan ini
+Route::get('/level/list', [LevelController::class, 'list'])->name('level.list');
 
-Route::group(['prefix' => 'dashboard'], function () {
-    Route::get('/level', [LevelController::class, 'dashboardLevel'])->name('dashboard.level');
-    Route::get('/kategori', [KategoriController::class, 'dashboardKategori'])->name('dashboard.kategori');
-    Route::get('/stok', [StokController::class, 'dashboardStok'])->name('dashboard.stok');
-    Route::get('/barang', [BarangController::class, 'dashboardBarang'])->name('dashboard.barang');
+// Kategori Routes
+Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
+Route::get('/kategori/list', [KategoriController::class, 'list'])->name('kategori.list');
 
-    Route::post('/level/list', [LevelController::class, 'dashboardLevelList'])->name('dashboard.level.list');
-    Route::post('/kategori/list', [KategoriController::class, 'dashboardKategoriList'])->name('dashboard.kategori.list');
-    Route::post('/stok/list', [StokController::class, 'dashboardStokList'])->name('dashboard.stok.list');
-    Route::post('/barang/list', [BarangController::class, 'dashboardBarangList'])->name('dashboard.barang.list');
+// Stok Routes
+Route::get('/stok', [StokController::class, 'index'])->name('stok.index');
+Route::get('/stok/list', [StokController::class, 'list'])->name('stok.list');
 
-    Route::post('/dashboard/kategori/list', [KategoriController::class, 'dashboardKategoriList'])->name('dashboard.kategori.list');
-});
+// Barang Routes
+Route::get('/barang', [BarangController::class, 'index'])->name('barang.index');
+Route::get('/barang/list', [BarangController::class, 'list'])->name('barang.list');

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -8,17 +7,18 @@ use App\Models\StokModel;
 
 class StokController extends Controller
 {
-    public function dashboardStok()
-{
-    return view('dashboard.stok');
-}
+    public function index()
+    {
+        $activeMenu = 'stok'; // Tambahkan ini
+        return view('stok.index', compact('activeMenu')); // Tambahkan compact
+    }
 
-public function dashboardStokList(Request $request)
+    public function list(Request $request) // Ubah nama fungsi
     {
         if ($request->ajax()) {
-            $data = StokModel::select(['id', 'barang_id', 'jumlah_stok', 'tanggal_masuk']); // Pilih kolom yang ingin ditampilkan
+            $data = StokModel::select(['stok_id', 'barang_id', 'jumlah_stok', 'tanggal_masuk']);
             return DataTables::of($data)->make(true);
         }
-        return abort(404); // Jika bukan permintaan AJAX
+        return abort(404);
     }
 }

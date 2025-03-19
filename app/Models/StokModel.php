@@ -2,21 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class StokModel extends Model
 {
-    use HasFactory;
+    protected $table = 't_stok';
+    protected $primaryKey = 'stok_id';
+    public $timestamps = true;
+    protected $fillable = ['barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah'];
 
-    // Tentukan nama tabel jika berbeda dengan nama model (dalam hal ini 'm_stok')
-    protected $table = 'm_stok';
+    public function barang(): BelongsTo
+    {
+        return $this->belongsTo(BarangModel::class, 'barang_id', 'barang_id');
+    }
 
-    // Tentukan kolom yang bisa diisi (fillable)
-    protected $fillable = [
-        'stok_name', // kolom yang sesuai dengan nama di tabel m_stok
-    ];
-
-    // Jika kolom 'created_at' dan 'updated_at' tidak ada di tabel, matikan fitur timestamp
-    public $timestamps = false;
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(UserModel::class, 'user_id', 'user_id');
+    }
 }
