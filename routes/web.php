@@ -20,6 +20,8 @@ Route::prefix('user')->group(function () {
     Route::get('/{id}', [UserController::class, 'show'])->name('user.show'); // Show user details
     Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit'); // Show form to edit user
     Route::put('/{id}', [UserController::class, 'update'])->name('user.update'); // Update user details
+    Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax']); // Menampilkan halaman form edit user Ajax
+    Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax']); // Menyimpan perubahan data user Ajax  
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy'); // Delete user
     Route::post('/list', [UserController::class, 'list'])->name('user.list'); // For fetching user list (Ajax)
 });
