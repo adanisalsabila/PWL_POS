@@ -204,4 +204,11 @@ class UserController extends Controller
         }
         return abort(404); // Jika bukan permintaan AJAX
     }
+    public function create_ajax()
+{
+    $level = LevelModel::select('level_id', 'level_nama')->get();
+
+    return view('user.create_ajax')
+           ->with('level', $level);
+}
 }

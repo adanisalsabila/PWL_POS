@@ -6,18 +6,21 @@
             <h3 class="card-title">Data Barang</h3>
         </div>
         <div class="card-body">
-            <table id="barang-table" class="table table-bordered table-striped">
+            <table id="barang-table" class="table table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Kategori ID</th>
-                        <th>Kode</th>
-                        <th>Nama</th>
+                        <th>Kategori Nama</th>
+                        <th>Barang Kode</th>
+                        <th>Barang Nama</th>
                         <th>Harga Beli</th>
                         <th>Harga Jual</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
+                <tbody>
+                    </tbody>
             </table>
         </div>
     </div>
@@ -29,32 +32,21 @@
             $('#barang-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('barang.list') !!}',
+                ajax: {
+                    url: '{!! route('barang.list') !!}',
+                    error: function(xhr, error, thrown) {
+                        console.error('Ajax error:', xhr, error, thrown);
+                    }
+                },
                 columns: [
-                    { data: 'barang_id', name: 'barang_id' },
-                    { data: 'kategori_id', name: 'kategori_id' },
+                    { data: 'kategori_nama', name: 'kategori_nama' },
                     { data: 'barang_kode', name: 'barang_kode' },
                     { data: 'barang_nama', name: 'barang_nama' },
                     { data: 'harga_beli', name: 'harga_beli' },
                     { data: 'harga_jual', name: 'harga_jual' },
-                    {
-                        data: 'aksi',
-                        name: 'aksi',
-                        orderable: false,
-                        searchable: false
-                    },
-                ],
-                columnDefs: [
-                    {
-                        targets: -1,
-                        render: function(data, type, row) {
-                            return '<a href="/barang/' + row.barang_id + '/edit" class="btn btn-sm btn-warning">Edit</a>' +
-                                '<form action="/barang/' + row.barang_id + '" method="POST" style="display: inline-block;">' +
-                                    '@csrf @method("DELETE")' +
-                                    '<button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Apakah Anda yakin?\')">Hapus</button>' +
-                                '</form>';
-                        }
-                    }
+                    { data: 'created_at', name: 'created_at' },
+                    { data: 'updated_at', name: 'updated_at' },
+                    { data: 'aksi', name: 'aksi', orderable: false, searchable: false }
                 ]
             });
         });
