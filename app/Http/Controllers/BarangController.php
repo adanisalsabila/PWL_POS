@@ -4,16 +4,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\BarangModel;
-
+use App\Models\KategoriModel;
 
 class BarangController extends Controller
 {
+    // Menampilkan halaman utama Barang
     public function index()
-    {
-        $activeMenu = 'barang';
-        return view('barang.index', compact('activeMenu'));
+{
+    $kategori = KategoriModel::all();  // Mengambil data kategori
+
+    if ($kategori->isEmpty()) {
+        // Jika tidak ada kategori, bisa menampilkan pesan error atau melakukan hal lain
+        return redirect()->route('kategori.index')->with('error', 'Tidak ada kategori tersedia.');
     }
 
+    $activeMenu = 'barang';  // Menetapkan active menu
+    return view('barang.index', compact('activeMenu', 'kategori'));
+}
+
+
+    // Menampilkan data Barang dengan AJAX
     public function list(Request $request)
     {
         if ($request->ajax()) {
@@ -25,11 +35,8 @@ class BarangController extends Controller
                     return $row->kategori ? $row->kategori->kategori_nama : 'No Kategori';
                 })
                 ->addColumn('aksi', function ($row) {
-                    return '<a href="/barang/' . $row->barang_id . '/edit" class="btn btn-sm btn-warning">Edit</a>' .
-                           '<form action="/barang/' . $row->barang_id . '" method="POST" style="display: inline-block;">' .
-                           '@csrf @method("DELETE")' .
-                           '<button type="submit" class="btn btn-sm btn-danger" onclick="return confirm(\'Apakah Anda yakin?\')">Hapus</button>' .
-                           '</form>';
+                    return '<a href="javascript:void(0)" onclick="editBarang(' . $row->barang_id . ')" class="btn btn-warning btn-sm">Edit</a>' .
+                           '<a href="javascript:void(0)" onclick="deleteBarang(' . $row->barang_id . ')" class="btn btn-danger btn-sm">Hapus</a>';
                 })
                 ->make(true);
         }
@@ -37,12 +44,63 @@ class BarangController extends Controller
         return abort(404);
     }
 
-    public function destroy($barang_id)
+    // Menyimpan data Barang baru menggunakan Ajax
+    public function store(Request $request)
     {
-        $barang = BarangModel::findOrFail($barang_id);
+        $request->validate([
+            'barang_kode' => 'required|string|max:50',
+            'barang_nama' => 'required|string|max:100',
+            'harga_beli' => 'required|numeric',
+            'harga_jual' => 'required|numeric',
+            'kategori_id' => 'required|exists:kategori,kategori_id',
+        ]);
+
+        $barang = BarangModel::create($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Barang berhasil ditambahkan!',
+            'data' => $barang
+        ]);
+    }
+
+    // Menampilkan form untuk mengedit Barang
+    public function edit($id)
+    {
+        $barang = BarangModel::findOrFail($id);
+        return response()->json($barang);
+    }
+
+    // Memperbarui data Barang menggunakan Ajax
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'barang_kode' => 'required|string|max:50',
+            'barang_nama' => 'required|string|max:100',
+            'harga_beli' => 'required|numeric',
+            'harga_jual' => 'required|numeric',
+            'kategori_id' => 'required|exists:kategori,kategori_id',
+        ]);
+
+        $barang = BarangModel::findOrFail($id);
+        $barang->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Barang berhasil diperbarui!',
+            'data' => $barang
+        ]);
+    }
+
+    // Menghapus data Barang menggunakan Ajax
+    public function destroy($id)
+    {
+        $barang = BarangModel::findOrFail($id);
         $barang->delete();
 
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Barang berhasil dihapus!',
+        ]);
     }
-   
 }
