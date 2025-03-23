@@ -8,6 +8,9 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\BarangController;
 
+use App\Http\Controllers\SupplierController;
+
+
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 // User Routes
@@ -30,16 +33,21 @@ Route::prefix('user')->group(function () {
 
 // Level Routes
 Route::prefix('level')->group(function () {
-    Route::resource('level', LevelController::class);
+    // Rute non-AJAX (menggunakan resource)
+    Route::get('/', [LevelController::class, 'index'])->name('level.index');
+    Route::get('/create', [LevelController::class, 'create'])->name('level.create');
+    Route::post('/', [LevelController::class, 'store'])->name('level.store');
+    Route::get('/{id}', [LevelController::class, 'show'])->name('level.show');
+    Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit');
+    Route::put('/{id}', [LevelController::class, 'update'])->name('level.update');
+    Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
 
-    Route::get('/', [LevelController::class, 'index'])->name('level.index'); // Display all levels
+    // Rute AJAX
     Route::get('/list', [LevelController::class, 'list'])->name('level.list'); // Fetch level list (Ajax)
-    Route::get('/create', [LevelController::class, 'create'])->name('level.create'); // Show form to create level
-    Route::post('/', [LevelController::class, 'store'])->name('level.store'); // Store new level
-    Route::get('/{id}', [LevelController::class, 'show'])->name('level.show'); // Show level details
-    Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit'); // Show form to edit level
-    Route::put('/{id}', [LevelController::class, 'update'])->name('level.update'); // Update level details
-    Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy'); // Delete level
+
+    // Rute khusus AJAX untuk edit dan delete (jika perlu)
+    // Route::get('/{id}/edit-ajax', [LevelController::class, 'editAjax'])->name('level.edit.ajax');
+    // Route::delete('/{id}/delete-ajax', [LevelController::class, 'deleteAjax'])->name('level.delete.ajax');
 });
 
 // Kategori Routes
@@ -56,15 +64,23 @@ Route::prefix('kategori')->group(function () {
 });
 
 
+
 // Stok Routes
 Route::prefix('stok')->group(function () {
     Route::get('/', [StokController::class, 'index'])->name('stok.index');
     Route::get('/list', [StokController::class, 'list'])->name('stok.list');
+
+    // CRUD Non-AJAX Routes
     Route::get('/create', [StokController::class, 'create'])->name('stok.create');
     Route::post('/', [StokController::class, 'store'])->name('stok.store');
     Route::get('/{id}/edit', [StokController::class, 'edit'])->name('stok.edit');
     Route::put('/{id}', [StokController::class, 'update'])->name('stok.update');
     Route::delete('/{id}', [StokController::class, 'destroy'])->name('stok.destroy');
+    Route::get('/stok/{id}', [StokController::class, 'show'])->name('stok.show');
+
+    // CRUD AJAX Routes
+    Route::get('/create-ajax', [StokController::class, 'create'])->name('stok.create_ajax'); // Rute untuk form create AJAX
+    Route::get('/{id}/edit-ajax', [StokController::class, 'edit'])->name('stok.edit_ajax'); // Rute untuk form edit AJAX
 });
 
 
@@ -78,4 +94,14 @@ Route::prefix('barang')->group(function () {
     Route::get('/{id}/edit', [BarangController::class, 'edit'])->name('barang.edit');
     Route::put('/{id}', [BarangController::class, 'update'])->name('barang.update');
     Route::delete('/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
+});
+
+Route::prefix('supplier')->group(function () {
+    Route::resource('supplier', SupplierController::class);
+    Route::get('/', [SupplierController::class, 'index'])->name('supplier.index');
+    Route::get('/create', [SupplierController::class, 'create'])->name('supplier.create');
+    Route::post('/store', [SupplierController::class, 'store'])->name('supplier.store');
+    Route::get('/edit/{id}', [SupplierController::class, 'edit'])->name('supplier.edit');
+    Route::put('/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
+    Route::delete('/destroy/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
 });

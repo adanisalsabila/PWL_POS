@@ -3,10 +3,10 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Edit Stok (AJAX)</h3>
+        <h3 class="card-title">Edit Stok</h3>
     </div>
     <div class="card-body">
-        <form id="editStokForm" data-id="{{ $stok->stok_id }}">
+        <form action="{{ route('stok.update', $stok->stok_id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="form-group">
@@ -40,31 +40,3 @@
     </div>
 </div>
 @endsection
-
-@push('js')
-<script>
-    $(document).ready(function() {
-        $('#editStokForm').submit(function(e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            $.ajax({
-                url: "/stok/" + id,
-                type: "PUT",
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.success) {
-                        alert(response.message);
-                        window.location.href = "{{ route('stok.index') }}";
-                    } else {
-                        alert('Gagal memperbarui stok.');
-                    }
-                },
-                error: function(error) {
-                    console.error(error);
-                    alert('Terjadi kesalahan.');
-                }
-            });
-        });
-    });
-</script>
-@endpush

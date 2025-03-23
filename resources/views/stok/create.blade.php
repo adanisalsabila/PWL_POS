@@ -3,10 +3,10 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Tambah Stok (AJAX)</h3>
+        <h3 class="card-title">Tambah Stok</h3>
     </div>
     <div class="card-body">
-        <form id="createStokForm">
+        <form action="{{ route('stok.create') }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="barang_id">Barang</label>
@@ -39,30 +39,3 @@
     </div>
 </div>
 @endsection
-
-@push('js')
-<script>
-    $(document).ready(function() {
-        $('#createStokForm').submit(function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: "{{ route('stok.store') }}",
-                type: "POST",
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.success) {
-                        alert(response.message);
-                        window.location.href = "{{ route('stok.index') }}";
-                    } else {
-                        alert('Gagal menambahkan stok.');
-                    }
-                },
-                error: function(error) {
-                    console.error(error);
-                    alert('Terjadi kesalahan.');
-                }
-            });
-        });
-    });
-</script>
-@endpush

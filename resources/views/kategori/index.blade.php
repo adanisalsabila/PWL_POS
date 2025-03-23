@@ -1,25 +1,22 @@
 @extends('layouts.template')
 
 @section('content')
-<!-- Content Header -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0">Kategori</h1>
-            </div><!-- /.col -->
+            </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ route('welcome') }}">Home</a></li>
                     <li class="breadcrumb-item active">Kategori</li>
                 </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+            </div>
+        </div>
+    </div>
 </div>
-<!-- /.content-header -->
 
-<!-- Main content -->
 <section class="content">
     <div class="container-fluid">
         <div class="card">
@@ -29,9 +26,11 @@
                     <button id="addKategoriBtn" class="btn btn-success">
                         <i class="fas fa-plus"></i> Tambah Kategori
                     </button>
+                    <button id="addKategoriAjaxBtn" class="btn btn-primary ml-2">
+                        <i class="fas fa-plus"></i> Tambah Kategori (Ajax)
+                    </button>
                 </div>
             </div>
-            <!-- Card Body -->
             <div class="card-body">
                 <table id="kategori-table" class="table table-bordered table-striped">
                     <thead>
@@ -43,17 +42,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Data will be populated by DataTables -->
                     </tbody>
                 </table>
             </div>
-            <!-- /.card-body -->
         </div>
-    </div><!-- /.container-fluid -->
+    </div>
 </section>
-<!-- /.content -->
 
-<!-- Modal Add/Edit Kategori -->
 <div class="modal fade" id="kategoriModal" tabindex="-1" role="dialog" aria-labelledby="kategoriModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -84,6 +79,26 @@
     </div>
 </div>
 
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Konfirmasi Hapus Kategori</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Apakah Anda yakin ingin menghapus kategori ini?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('js')
@@ -98,23 +113,26 @@ $(document).ready(function() {
             { data: 'kategori_kode', name: 'kategori_kode' },
             { data: 'kategori_nama', name: 'kategori_nama' },
             {
-                data: 'action', 
-                name: 'action', 
-                orderable: false, 
-                searchable: false
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false,
+                render: function(data, type, row) {
+                    return '<a href="javascript:void(0)" class="btn btn-info btn-sm detail-btn" data-id="' + row.kategori_id + '">Detail</a> ' +
+                           '<a href="javascript:void(0)" class="btn btn-warning btn-sm edit-btn" data-id="' + row.kategori_id + '">Edit</a> ' +
+                           '<button class="btn btn-danger btn-sm delete-btn" data-id="' + row.kategori_id + '">Hapus</button>';
+                }
             }
         ]
     });
 
-    // Open Modal Add Category
-    $('#addKategoriBtn').click(function() {
+    $('#addKategoriAjaxBtn').click(function() {
         $('#kategoriModal').modal('show');
         $('#kategoriForm')[0].reset();
         $('#kategori_id').val('');
-        $('#kategoriModalLabel').text('Tambah Kategori');
+        $('#kategoriModalLabel').text('Tambah Kategori (Ajax)');
     });
 
-    // Save or Update Category
     $('#saveKategoriBtn').click(function() {
         var id = $('#kategori_id').val();
         var url = id ? '/kategori/' + id : '/kategori';
@@ -129,14 +147,13 @@ $(document).ready(function() {
                 table.ajax.reload();
                 alert(response.success);
             },
-            error: function(response) {
-                alert('Terjadi kesalahan!');
+            error: function(xhr, status, error) {
+                alert('Terjadi kesalahan: ' + xhr.responseJSON.error);
             }
         });
     });
 
-    // Edit Category
-    $('#kategori-table').on('click', '.btn-warning', function() {
+    $('#kategori-table').on('click', '.edit-btn', function() {
         var id = $(this).data('id');
         $.ajax({
             url: '/kategori/' + id + '/edit',
@@ -147,21 +164,45 @@ $(document).ready(function() {
                 $('#kategori_nama').val(response.kategori_nama);
                 $('#kategoriModal').modal('show');
                 $('#kategoriModalLabel').text('Edit Kategori');
+            },
+            error: function(xhr, status, error) {
+                alert('Terjadi kesalahan: ' + xhr.responseJSON.error);
             }
         });
     });
 
-    // Delete Category
-    $('#kategori-table').on('submit', '.delete-form', function(e) {
-        e.preventDefault();
-        var form = $(this);
+    $('#kategori-table').on('click', '.delete-btn', function() {
+        var id = $(this).data('id');
+        $('#confirmDeleteModal').modal('show');
+        $('#confirmDeleteBtn').click(function() {
+            $.ajax({
+                url: '/kategori/' + id,
+                method: 'DELETE',
+                data: {_token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    $('#confirmDeleteModal').modal('hide');
+                    table.ajax.reload();
+                    alert(response.success);
+                },
+                error: function(xhr, status, error) {
+                    alert('Terjadi kesalahan: ' + xhr.responseJSON.error);
+                }
+            });
+        });
+    });
+
+    $('#kategori-table').on('click', '.detail-btn', function() {
+        var id = $(this).data('id');
         $.ajax({
-            url: form.attr('action'),
-            method: 'DELETE',
-            data: form.serialize(),
+            url: '/kategori/' + id,
+            method: 'GET',
             success: function(response) {
-                table.ajax.reload();
-                alert(response.success);
+                // Tampilkan detail kategori (misalnya, di modal atau halaman baru)
+                alert('Kode: ' + response.kategori_kode + '\nNama: ' + response.kategori_nama);
+            },
+            error: function(xhr, status, error) {
+                alert('Terjadi kesalahan: ' + xhr.responseJSON.error);
             }
         });
     });
