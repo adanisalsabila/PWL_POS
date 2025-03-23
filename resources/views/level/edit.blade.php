@@ -28,6 +28,7 @@
                 <form action="{{ route('level.update', $level->level_id) }}" method="POST">
                     @csrf
                     @method('PUT')
+
                     <div class="form-group">
                         <label for="level_kode">Kode Level</label>
                         <input type="text" class="form-control" id="level_kode" name="level_kode" value="{{ $level->level_kode }}" required>
@@ -36,6 +37,7 @@
                         <label for="level_nama">Nama Level</label>
                         <input type="text" class="form-control" id="level_nama" name="level_nama" value="{{ $level->level_nama }}" required>
                     </div>
+
                     <button type="submit" class="btn btn-primary">Update</button>
                     <a href="{{ route('level.index') }}" class="btn btn-secondary">Batal</a>
                 </form>

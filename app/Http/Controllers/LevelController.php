@@ -81,16 +81,23 @@ class LevelController extends Controller
     public function edit($id)
     {
         try {
-            $level = LevelModel::findOrFail($id);
-            return response()->json([
-                'status' => 'success',
-                'data' => $level,
-            ]);
+            $level = LevelModel::findOrFail($id);  // Fetch level by ID
+            return view('level.edit', compact('level'));  // Pass the level to the view
+        } catch (\Exception $e) {
+            return redirect()->route('level.index')->with('error', 'Level tidak ditemukan.');
+        }
+    }
+    
+    // Menampilkan data Level untuk edit dengan AJAX
+    public function editAjax($id)
+    {
+        try {
+            $level = LevelModel::findOrFail($id);  // Fetch level by ID
+            return response()->json($level);  // Return data as JSON for AJAX
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Level tidak ditemukan.',
-                'error' => $e->getMessage(),
             ], 404);
         }
     }

@@ -51,6 +51,7 @@
 @include('level.edit_ajax')
 @include('level.confirm_ajax')
 
+
 @endsection
 
 @section('scripts')

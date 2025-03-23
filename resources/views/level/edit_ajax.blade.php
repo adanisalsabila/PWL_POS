@@ -1,46 +1,29 @@
-@extends('layouts.template')
-
-@section('content')
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Edit Level</h1>
+<!-- Modal for editing level -->
+<div class="modal fade" id="modal-edit-ajax" tabindex="-1" role="dialog" aria-labelledby="modal-edit-ajax-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-edit-ajax-label">Edit Level</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('level.index') }}">Level</a></li>
-                    <li class="breadcrumb-item active">Edit</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="content">
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Edit Data Level</h3>
-            </div>
-            <div class="card-body">
-                <form action="{{ route('level.update', $level->level_id) }}" method="POST">
+            <div class="modal-body">
+                <form id="form-edit-ajax" method="POST">
                     @csrf
-                    @method('PUT')
+                    <input type="hidden" id="edit_ajax_level_id" name="level_id">
                     <div class="form-group">
-                        <label for="level_kode">Kode Level</label>
-                        <input type="text" class="form-control" id="level_kode" name="level_kode" value="{{ $level->level_kode }}" required>
+                        <label for="edit_ajax_level_kode">Kode Level</label>
+                        <input type="text" class="form-control" id="edit_ajax_level_kode" name="level_kode" required>
                     </div>
                     <div class="form-group">
-                        <label for="level_nama">Nama Level</label>
-                        <input type="text" class="form-control" id="level_nama" name="level_nama" value="{{ $level->level_nama }}" required>
+                        <label for="edit_ajax_level_nama">Nama Level</label>
+                        <input type="text" class="form-control" id="edit_ajax_level_nama" name="level_nama" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button>
-                    <a href="{{ route('level.index') }}" class="btn btn-secondary">Batal</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </form>
             </div>
         </div>
     </div>
-</section>
-@endsection
+</div>
