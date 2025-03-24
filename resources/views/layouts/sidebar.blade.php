@@ -75,6 +75,45 @@
                     <p>Transaksi Penjualan</p>
                 </a>
             </li>
+
+             <!-- Tombol Logout -->
+        {{-- <li>
+            <li class="nav-header">Log Out</li>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn-logout">Logout</button>
+            </form>
+        </li> --}}
+
+        <li>
+            <li class="nav-header">Log Out</li>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn-logout" style="background-color: red; color: white; padding: 10px 20px; border: none; cursor: pointer; width: 100%; text-align: center;">
+                    Logout
+                </button>
+            </form>
+        
+            <!-- CSS for the button -->
+            <style>
+                .btn-logout {
+                    background-color: red; /* Warna latar belakang merah */
+                    color: white; /* Warna teks putih */
+                    padding: 10px 20px;
+                    border: none;
+                    cursor: pointer;
+                    width: 100%;
+                    text-align: center;
+                    font-size: 16px; /* Ukuran font */
+                    border-radius: 5px; /* Sudut melengkung */
+                }
+        
+                .btn-logout:hover {
+                    background-color: darkred; /* Warna saat hover */
+                }
+            </style>
+        </li>
+        
         </ul>
     </nav>
 </div>

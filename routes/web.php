@@ -10,19 +10,18 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
-// Welcome & Auth Routes
+
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 // Route Parameter Pattern
 Route::pattern('id', '[0-9]+');
 
-// Protected Routes (Requires Authentication)
-Route::middleware(['auth'])->group(function () {
-
-    // Welcome Route
-    Route::get('/', [WelcomeController::class, 'index'])->name('welcome');  
+// // Protected Routes (Requires Authentication)
+// Route::middleware(['auth'])->group(function () {
+    Route::get('/', [WelcomeController::class, 'index'])->name('welcome'); // Halaman utama setelah login
 
     // User Routes
     Route::prefix('user')->group(function () {
@@ -44,8 +43,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/list', [UserController::class, 'list'])->name('user.list');
     });
 
-    // Level Routes
-    Route::middleware(['authorize:ADM'])->group(function () {
+    // // Level Routes
+    // Route::middleware(['authorize:ADM'])->group(function () {
+        Route::prefix('level')->group(function () {
         Route::get('/', [LevelController::class, 'index'])->name('level.index');
         Route::get('/create', [LevelController::class, 'create'])->name('level.create');
         Route::post('/', [LevelController::class, 'store'])->name('level.store');
@@ -87,7 +87,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Barang Routes
-    Route::prefix('barang')->group(function () {
+    // Route::middleware(['authorize:ADM, MNG'])->group(function () {
+        Route::prefix('barang')->group(function () {
         Route::get('/', [BarangController::class, 'index'])->name('barang.index');
         Route::get('/list', [BarangController::class, 'list'])->name('barang.list');
         Route::get('/create', [BarangController::class, 'create'])->name('barang.create');
@@ -107,4 +108,5 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{id}', [SupplierController::class, 'update'])->name('supplier.update');
         Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
     });
-});
+
+// });

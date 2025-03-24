@@ -29,11 +29,15 @@ class UserModel extends Model
     }
 
     public function getRoleName(): string {
-        return $this->level->level_idj;
+        return $this->level->level_nama;
     }
 
     public function hasRole($role): bool {
         return $this->level->level_kode == $role;
     }
+
+    // public function getRole(){
+    //     return $this->level->level_kode;
+    // }
 
 }
