@@ -14,10 +14,10 @@ class UserModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'm_user';
+    protected $table = 'm_users';
     protected $primaryKey = 'user_id';
 
-    protected $fillable = ['level_id', 'username', 'nama', 'password', 'created_at', 'updated_at'];
+    protected $fillable = ['level_id', 'level_kode', 'username', 'nama', 'password', 'created_at', 'updated_at'];
 
     protected $hidden = ['password']; //jgn ditampilkan saat select
 
@@ -28,10 +28,12 @@ class UserModel extends Model
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
     }
 
-    // Di App\Models\UserModel
-    public function findForPassport($username)
-    {
-        return $this->where('username', $username)->first();
+    public function getRoleName(): string {
+        return $this->level->level_idj;
+    }
+
+    public function hasRole($role): bool {
+        return $this->level->level_kode == $role;
     }
 
 }
