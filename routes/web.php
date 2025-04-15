@@ -33,6 +33,12 @@ Route::pattern('id', '[0-9]+');
         Route::put('/{id}', [UserController::class, 'update'])->name('user.update');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 
+         // Route untuk menampilkan form registrasi
+Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('register');
+
+// Route untuk memproses data registrasi (menggunakan method store pada UserController)
+Route::post('/register', [UserController::class, 'storeRegistration'])->name('register.store');
+
         // Ajax Routes
         Route::get('/create_ajax', [UserController::class, 'create_ajax']);
         Route::post('/ajax', [UserController::class, 'store_ajax']);
@@ -97,6 +103,8 @@ Route::pattern('id', '[0-9]+');
         Route::get('/{id}/edit', [BarangController::class, 'edit'])->name('barang.edit');
         Route::put('/{id}', [BarangController::class, 'update'])->name('barang.update');
         Route::delete('/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
+Route::get('/barang/import', [BarangController::class, 'import']); // ajax form upload excel
+Route::post('/barang/import_ajax', [BarangController::class, 'import_ajax']); // ajax import excel
     });
 
     // Supplier Routes
@@ -109,4 +117,5 @@ Route::pattern('id', '[0-9]+');
         Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
     });
 
+   
 // });

@@ -332,4 +332,60 @@ public function delete_ajax(Request $request, $id)
 
     return redirect('/');
 }
+// Di dalam App\Http\Controllers\UserController.php
+
+public function showRegistrationForm()
+{
+    $breadcrumb = (object) [
+        'title' => 'Registrasi User',
+        'list' => ['Home', 'Registrasi']
+    ];
+
+    $page = (object) [
+        'title' => 'Form Registrasi User Baru'
+    ];
+
+    $level = LevelModel::all();
+    $activeMenu = ''; // Sesuaikan jika ada menu aktif
+
+    return view('auth.register', [ // Sesuaikan path view jika Anda meletakkan file di direktori lain
+        'breadcrumb' => $breadcrumb,
+        'page' => $page,
+        'level' => $level,
+        'activeMenu' => $activeMenu
+    ]);
+}
+
+public function storeRegistration(Request $request)
+{
+    $request->validate([
+        'username' => 'required|string|min:3|unique:m_user,username',
+        'nama' => 'required|string|max:100',
+        'password' => 'required|min:5|confirmed', // Menambahkan konfirmasi password
+        'password_confirmation' => 'required|min:5', // Field konfirmasi password
+        'level_id' => 'required|integer'
+    ], [
+        'username.required' => 'Username harus diisi.',
+        'username.min' => 'Username minimal 3 karakter.',
+        'username.unique' => 'Username sudah digunakan.',
+        'nama.required' => 'Nama harus diisi.',
+        'nama.max' => 'Nama maksimal 100 karakter.',
+        'password.required' => 'Password harus diisi.',
+        'password.min' => 'Password minimal 5 karakter.',
+        'password.confirmed' => 'Konfirmasi password tidak sesuai.',
+        'password_confirmation.required' => 'Konfirmasi password harus diisi.',
+        'password_confirmation.min' => 'Konfirmasi password minimal 5 karakter.',
+        'level_id.required' => 'Level harus dipilih.',
+        'level_id.integer' => 'Level tidak valid.'
+    ]);
+
+    UserModel::create([
+        'username' => $request->username,
+        'nama' => $request->nama,
+        'password' => bcrypt($request->password),
+        'level_id' => $request->level_id
+    ]);
+
+    return redirect('/login')->with('success', 'Registrasi berhasil. Silakan login.'); // Redirect ke halaman login setelah berhasil registrasi
+}
 }
