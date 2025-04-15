@@ -26,12 +26,10 @@
             <div class="card-header">
                 <h3 class="card-title">Daftar Supplier</h3>
                 <div class="card-tools">
-                    <button id="addSupplierBtn" class="btn btn-success">
-                        <i class="fas fa-plus"></i> Tambah Supplier
-                    </button>
-                    <button id="ajaxAddSupplierBtn" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Tambah Supplier (AJAX)
-                    </button>
+                    <button onclick="modalAction('{{ url('/supplier/import') }}')" class="btn btn-info">Import Supplier</button>
+                    <a href="{{ url('/supplier/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i> Export Supplier (Excel)</a>
+                    <a href="{{ url('/supplier/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i> Export Supplier (PDF)</a>
+                    <button onclick="modalAction('{{ url('/supplier/create_ajax') }}')" class="btn btn-success">Tambah Supplier (Ajax)</button>
                 </div>
                 
             </div>

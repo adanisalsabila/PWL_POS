@@ -8,6 +8,7 @@ use App\Http\Controllers\StokController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -32,6 +33,11 @@ Route::pattern('id', '[0-9]+');
         Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
         Route::put('/{id}', [UserController::class, 'update'])->name('user.update');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+        Route::get('/user/import', [UserController::class, 'import'])->name('user.import');
+Route::post('/user/import_ajax', [UserController::class, 'import_ajax'])->name('user.import_ajax');
+Route::get('/user/export_excel', [UserController::class, 'export_excel'])->name('user.export_excel');
+Route::get('/user/export_pdf', [UserController::class, 'export_pdf'])->name('user.export_pdf');
+
 
          // Route untuk menampilkan form registrasi
 Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('register');
@@ -59,6 +65,10 @@ Route::post('/register', [UserController::class, 'storeRegistration'])->name('re
         Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit');
         Route::put('/{id}', [LevelController::class, 'update'])->name('level.update');
         Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
+        Route::get('/level/import', [LevelController::class, 'import'])->name('level.import');
+        Route::post('/level/import_ajax', [LevelController::class, 'import_ajax'])->name('level.import_ajax');
+        Route::get('/level/export_excel', [LevelController::class, 'export_excel'])->name('level.export_excel');
+        Route::get('/level/export_pdf', [LevelController::class, 'export_pdf'])->name('level.export_pdf');
 
         // Ajax Routes
         Route::get('/list', [LevelController::class, 'list'])->name('level.list');
@@ -74,6 +84,10 @@ Route::post('/register', [UserController::class, 'storeRegistration'])->name('re
         Route::get('/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
         Route::put('/{id}', [KategoriController::class, 'update'])->name('kategori.update');
         Route::delete('/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
+        Route::get('/import', [KategoriController::class, 'import'])->name('kategori.import');
+        Route::post('/import_ajax', [KategoriController::class, 'import_ajax'])->name('kategori.import_ajax');
+        Route::get('/export_excel', [KategoriController::class, 'export_excel'])->name('kategori.export_excel');
+        Route::get('/export_pdf', [KategoriController::class, 'export_pdf'])->name('kategori.export_pdf');
     });
 
     // Stok Routes
@@ -117,7 +131,14 @@ Route::get('/export_pdf', [BarangController::class, 'export_pdf']); // export pd
         Route::get('/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
         Route::put('/{id}', [SupplierController::class, 'update'])->name('supplier.update');
         Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
+        Route::get('/supplier/import', [SupplierController::class, 'import'])->name('supplier.import');
+Route::post('/supplier/import_ajax', [SupplierController::class, 'import_ajax'])->name('supplier.import_ajax');
+Route::get('/supplier/export_excel', [SupplierController::class, 'export_excel'])->name('supplier.export_excel');
+Route::get('/supplier/export_pdf', [SupplierController::class, 'export_pdf'])->name('supplier.export_pdf');
     });
+
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+Route::post('/profile/upload', [ProfileController::class, 'upload'])->name('profile.upload');
 
    
 // });
